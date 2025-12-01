@@ -88,3 +88,7 @@ AUTH_USER_MODEL = "AI_core.CustomUser"
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/login/'  
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://*.onrender.com/*",
+]
