@@ -99,7 +99,7 @@ def main_page(request):
 
             client = OpenAI(
                 base_url="https://api.groq.com/openai/v1",
-                api_key=Groq_token
+                api_key="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"
             )
 
             response = client.responses.create(
