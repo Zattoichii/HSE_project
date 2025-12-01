@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Вход — AI Marketing Generator</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: #f0f2f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 420px;
+            background: #fff;
+            padding: 40px;
+            border-radius: 14px;
+            box-shadow: 0 6px 28px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 24px;
+            color: #2d2d2d;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 18px;
+            border: 1px solid #d8d8d8;
+            border-radius: 10px;
+            font-size: 15px;
+            background: #fafafa;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #4a6cff;
+            background: #ffffff;
+            box-shadow: 0 0 0 3px rgba(74,108,255,0.12);
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            font-size: 16px;
+            border: none;
+            border-radius: 10px;
+            background: #4a6cff;
+            color: #fff;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            background: #3958e0;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 18px;
+            font-size: 14px;
+            color: #444;
+        }
+
+        .login-link a {
+            color: #4a6cff;
+            text-decoration: none;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        .error-box {
+            background-color: #ff4a4a;
+            color: #fff;
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            position: relative;
+            display: none;
+        }
+
+        .error-box button {
+            position: absolute;
+            top: 8px;
+            right: 10px;
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Вход в аккаунт</h2>
+
+        {% if form.errors %}
+        <div class="error-box" id="errorBox">
+            <span>Аккаунт не найден или введён неверный логин/пароль.</span>
+            <button onclick="closeError()">×</button>
+        </div>
+        <script>document.getElementById('errorBox').style.display = 'block';</script>
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+            <label>Email</label>
+            <input type="text" name="username" placeholder="Введите email" required />
+
+            <label>Пароль</label>
+            <input type="password" name="password" placeholder="Введите пароль" required />
+
+            <button type="submit">Войти</button>
+        </form>
+
+        <div class="login-link">
+            Нет аккаунта? <a href="{% url 'registration' %}">Регистрация</a>
+        </div>
+    </div>
+
+    <script>
+        function closeError() {
+            document.getElementById('errorBox').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

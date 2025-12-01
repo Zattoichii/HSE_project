@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Генератор маркетинговой коммуникации</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background: #fff;
+            margin-top: 40px;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            position: relative;
+            z-index: 100; 
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 16px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            background: #4a6cff;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #3a56d6;
+        }
+
+        .result-box {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f0f3ff;
+            border-radius: 8px;
+            white-space: pre-line;
+        }
+
+        .profile-icon {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #4a6cff;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            cursor: pointer;
+            user-select: none;
+            z-index: 400; 
+        }
+
+        .profile-menu {
+            position: absolute;
+            top: 60px;
+            right: 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+            padding: 15px;
+            display: none;
+            min-width: 200px;
+            text-align: center;
+            z-index: 400;
+        }
+
+        .profile-menu p {
+            margin: 0 0 10px;
+            font-weight: 600;
+            color: #333;
+            word-break: break-all;
+        }
+
+        .profile-menu form button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            background: #ff4a4a;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .profile-menu form button:hover {
+            background: #e03a3a;
+        }
+
+        .request-counter {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #4a6cff;
+            color: #ffffff;
+            padding: 10px 15px;
+            border-radius: 10px;
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 300;
+            font-size: 14px;
+        }
+
+        .subscription-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 500; 
+        }
+
+        .subscription-box {
+            background: #fff;
+            padding: 25px 30px;
+            border-radius: 12px;
+            width: 320px;
+            text-align: center;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+        }
+
+        .subscription-box h3 {
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 20px;
+            color: #333;
+        }
+
+        .subscription-box p {
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .subscription-box button {
+            padding: 10px 15px;
+            font-size: 14px;
+            border: none;
+            border-radius: 8px;
+            background: #4a6cff;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .subscription-box button:hover {
+            background: #3958e0;
+        }
+
+        .disabled-btn {
+            background-color: #ccc !important;
+            cursor: not-allowed;
+            color: #666 !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="profile-icon" onclick="toggleProfileMenu()">
+            {{ request.user.username|first|upper }}
+        </div>
+        <div class="profile-menu" id="profileMenu">
+            <p>{{ request.user.email }}</p>
+            <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit">Выйти</button>
+            </form>
+        </div>
+
+        <h2>Маркетинговый генератор AI</h2>
+
+        <form id="form" method="POST">
+            {% csrf_token %}
+
+            <label>Имя</label>
+            <input type="text" name="user_name" />
+
+            <label>Дополнительная информация</label>
+            <textarea name="extra_info" rows="2"></textarea>
+            <label>Возраст</label>
+            <input type="text" name="TA_age" />
+            <label>Доход</label>
+            <input type="text" name="TA_income" />
+            <label>Интересы</label>
+            <input type="text" name="TA_interests" />
+            <label>Социальный статус</label>
+            <select name="TA_social_status">
+                <option value="">Выберите статус</option>
+                <option>Холост</option>
+                <option>В отношениях</option>
+                <option>Женат/замужем без детей</option>
+                <option>Женат/замужем с детьми</option>
+                <option>В разводе</option>
+            </select>
+            <label>Пол</label>
+            <select name="TA_gender">
+                <option value="">Выберите пол</option>
+                <option>Мужчина</option>
+                <option>Женщина</option>
+            </select>
+            <label>Образование</label>
+            <select name="TA_education">
+                <option value="">Выберите образование</option>
+                <option>Начальное общее</option>
+                <option>Среднее общее</option>
+                <option>Основное общее</option>
+                <option>Среднее профессиональное</option>
+                <option>Бакалавриат</option>
+                <option>Магистратура</option>
+                <option>Учёная степень</option>
+            </select>
+            <label>Тип коммуникации</label>
+            <select name="communication_type">
+                <option value="">Выберите тип</option>
+                <option>Email рассылка</option>
+                <option>Push уведомление</option>
+                <option>СМС рассылка</option>
+                <option>Пост в социальные сети</option>
+            </select>
+            <label>Цель коммуникации</label>
+            <textarea name="communication_purpose" rows="3"></textarea>
+
+            <button type="submit" {% if remaining_requests <= 0 %}disabled class="disabled-btn"{% endif %}>
+                Сгенерировать
+            </button>
+        </form>
+
+        <div class="result-box">{{ result }}</div>
+    </div>
+
+    <div class="request-counter">
+        Бесплатные запросы: {{ remaining_requests }} из {{ request.user.max_requests }}
+    </div>
+
+    <div class="subscription-popup" id="subscriptionPopup">
+        <div class="subscription-box">
+            <h3>Бесплатные запросы закончились</h3>
+            <p>Оформите подписку на сервис - всего 500₽ в месяц, чтобы продолжить пользоваться генератором.</p>
+            <button onclick="closeSubscriptionPopup()">Закрыть</button>
+        </div>
+    </div>
+
+    <script>
+        function toggleProfileMenu() {
+            const menu = document.getElementById('profileMenu');
+            menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
+        }
+
+        document.addEventListener('click', function(event) {
+            const menu = document.getElementById('profileMenu');
+            const icon = document.querySelector('.profile-icon');
+            if (!menu.contains(event.target) && !icon.contains(event.target)) {
+                menu.style.display = 'none';
+            }
+        });
+
+        function showSubscriptionPopup() {
+            document.getElementById('subscriptionPopup').style.display = 'flex';
+        }
+
+        function closeSubscriptionPopup() {
+            document.getElementById('subscriptionPopup').style.display = 'none';
+        }
+
+        {% if remaining_requests <= 0 %}
+            showSubscriptionPopup();
+        {% endif %}
+    </script>
+</body>
+</html>
